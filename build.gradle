@@ -1,23 +1,30 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'java'
+    id 'java-library'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(15)
+    }
+}
 
 jar {
     manifest {
         attributes 'Main-Class': 'com.svetroid.hobbes.Main'
     }
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-        (configurations.runtime).collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
     jcenter()
 }
 
